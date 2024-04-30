@@ -2,8 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.1</AssemblyVersion>
+    <FileVersion>1.0.1.1</FileVersion>
+    <Company>OGA</Company>
+    <Product>OGA Libraries</Product>
+    <PackageId>OGA.Sequence.Lib</PackageId>
+    <Authors>Lee White</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>OGA Sequence Library</Description>
+    <PackageReleaseNotes>(Please write the package release notes in "OGA.Sequence.Lib-RELEASE-NOTES.txt".)</PackageReleaseNotes>
     <AssemblyName>OGA.Sequence.Lib</AssemblyName>
     <RootNamespace>OGA.Sequence.Lib</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
