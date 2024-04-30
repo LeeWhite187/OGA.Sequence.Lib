@@ -54,12 +54,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OGA.Sequence.Lib_NET48\OGA.Sequence.Lib_NET48.csproj">
-      <Project>{1776b77e-7f47-4ab1-b02e-c53fbd309010}</Project>
-      <Name>OGA.Sequence.Lib_NET48</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk">
       <Version>17.6.2</Version>
     </PackageReference>
@@ -81,6 +75,12 @@
     <PackageReference Include="OGA.Testing.Lib">
       <Version>1.11.3</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OGA.Sequence.Lib_NET48\OGA.Sequence.Lib_NET48.csproj">
+      <Project>{fdc9f82e-ec59-45c0-b821-b86978e507b7}</Project>
+      <Name>OGA.Sequence.Lib_NET48</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems" Label="Shared" />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
