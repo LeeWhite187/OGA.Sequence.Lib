@@ -1,0 +1,97 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.Sequence.Lib_TestNET5", "OGA.Sequence.Lib_TestNET5\OGA.Sequence.Lib_TestNET5.csproj", "{6F6907CF-964A-4371-9E94-223848D98131}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.Sequence.Lib_NET5", "OGA.Sequence.Lib_NET5\OGA.Sequence.Lib_NET5.csproj", "{B6DDE9BD-C0DA-4CDE-8432-26A6A309B103}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.Sequence.Lib_NET6", "OGA.Sequence.Lib_NET6\OGA.Sequence.Lib_NET6.csproj", "{F6056FE8-F85C-410C-83FB-D9F20D69BBED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.Sequence.Lib_NET7", "OGA.Sequence.Lib_NET7\OGA.Sequence.Lib_NET7.csproj", "{71193714-6461-43C7-8B75-C67240B52AB9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.Sequence.Lib_TestNET6", "OGA.Sequence.Lib_TestNET6\OGA.Sequence.Lib_TestNET6.csproj", "{D8982A1B-2549-4E7D-A3B9-BD79741F61F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.Sequence.Lib_TestNET7", "OGA.Sequence.Lib_TestNET7\OGA.Sequence.Lib_TestNET7.csproj", "{133ACC27-2CFC-42EA-9899-CE86AC2C2262}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OGA.Sequence.Lib_SP", "OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.shproj", "{55462B4F-A927-4F95-9CAD-DF72C26649D3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OGA.Sequence.Lib_Test_SP", "OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.shproj", "{9C898CC7-0E34-4C75-87AE-75AAF610BC3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGA.Sequence.Lib_NET452", "OGA.Sequence.Lib_NET452\OGA.Sequence.Lib_NET452.csproj", "{BF467C53-E2BF-49FD-943C-4D14703AC964}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGA.Sequence.Lib_NET48", "OGA.Sequence.Lib_NET48\OGA.Sequence.Lib_NET48.csproj", "{1776B77E-7F47-4AB1-B02E-C53FBD309010}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGA.Sequence.Lib_TestNET452", "OGA.Sequence.Lib_TestNET452\OGA.Sequence.Lib_TestNET452.csproj", "{DE6819CD-2293-4824-BEA1-F6570283BBED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGA.Sequence.Lib_TestNET48", "OGA.Sequence.Lib_TestNET48\OGA.Sequence.Lib_TestNET48.csproj", "{222C6508-B297-43D4-ACB3-87417010FA0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F6907CF-964A-4371-9E94-223848D98131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6907CF-964A-4371-9E94-223848D98131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6907CF-964A-4371-9E94-223848D98131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6907CF-964A-4371-9E94-223848D98131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DDE9BD-C0DA-4CDE-8432-26A6A309B103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DDE9BD-C0DA-4CDE-8432-26A6A309B103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DDE9BD-C0DA-4CDE-8432-26A6A309B103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DDE9BD-C0DA-4CDE-8432-26A6A309B103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6056FE8-F85C-410C-83FB-D9F20D69BBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6056FE8-F85C-410C-83FB-D9F20D69BBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6056FE8-F85C-410C-83FB-D9F20D69BBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6056FE8-F85C-410C-83FB-D9F20D69BBED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71193714-6461-43C7-8B75-C67240B52AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71193714-6461-43C7-8B75-C67240B52AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71193714-6461-43C7-8B75-C67240B52AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71193714-6461-43C7-8B75-C67240B52AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8982A1B-2549-4E7D-A3B9-BD79741F61F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8982A1B-2549-4E7D-A3B9-BD79741F61F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8982A1B-2549-4E7D-A3B9-BD79741F61F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8982A1B-2549-4E7D-A3B9-BD79741F61F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{133ACC27-2CFC-42EA-9899-CE86AC2C2262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{133ACC27-2CFC-42EA-9899-CE86AC2C2262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{133ACC27-2CFC-42EA-9899-CE86AC2C2262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{133ACC27-2CFC-42EA-9899-CE86AC2C2262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF467C53-E2BF-49FD-943C-4D14703AC964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF467C53-E2BF-49FD-943C-4D14703AC964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF467C53-E2BF-49FD-943C-4D14703AC964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF467C53-E2BF-49FD-943C-4D14703AC964}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1776B77E-7F47-4AB1-B02E-C53FBD309010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1776B77E-7F47-4AB1-B02E-C53FBD309010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1776B77E-7F47-4AB1-B02E-C53FBD309010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1776B77E-7F47-4AB1-B02E-C53FBD309010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE6819CD-2293-4824-BEA1-F6570283BBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE6819CD-2293-4824-BEA1-F6570283BBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE6819CD-2293-4824-BEA1-F6570283BBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE6819CD-2293-4824-BEA1-F6570283BBED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{222C6508-B297-43D4-ACB3-87417010FA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{222C6508-B297-43D4-ACB3-87417010FA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{222C6508-B297-43D4-ACB3-87417010FA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{222C6508-B297-43D4-ACB3-87417010FA0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B03CA7DE-3971-4867-B574-09A84C98FE5D}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems*{133acc27-2cfc-42ea-9899-ce86ac2c2262}*SharedItemsImports = 5
+		OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems*{1776b77e-7f47-4ab1-b02e-c53fbd309010}*SharedItemsImports = 4
+		OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems*{222c6508-b297-43d4-acb3-87417010fa0b}*SharedItemsImports = 4
+		OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems*{55462b4f-a927-4f95-9cad-df72c26649d3}*SharedItemsImports = 13
+		OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems*{6f6907cf-964a-4371-9e94-223848d98131}*SharedItemsImports = 5
+		OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems*{71193714-6461-43c7-8b75-c67240b52ab9}*SharedItemsImports = 5
+		OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems*{9c898cc7-0e34-4c75-87ae-75aaf610bc3d}*SharedItemsImports = 13
+		OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems*{b6dde9bd-c0da-4cde-8432-26a6a309b103}*SharedItemsImports = 5
+		OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems*{bf467c53-e2bf-49fd-943c-4d14703ac964}*SharedItemsImports = 4
+		OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems*{d8982a1b-2549-4e7d-a3b9-bd79741f61f7}*SharedItemsImports = 5
+		OGA.Sequence.Lib_Test_SP\OGA.Sequence.Lib_Test_SP.projitems*{de6819cd-2293-4824-bea1-f6570283bbed}*SharedItemsImports = 4
+		OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems*{f6056fe8-f85c-410c-83fb-d9f20d69bbed}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal

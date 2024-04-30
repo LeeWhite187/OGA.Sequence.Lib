@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>OGA.Sequence.Lib</AssemblyName>
+    <RootNamespace>OGA.Sequence.Lib</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);NET6</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);NET6</DefineConstants>
+  </PropertyGroup>
+
+  <Import Project="..\OGA.Sequence.Lib_SP\OGA.Sequence.Lib_SP.projitems" Label="Shared" />
+
+</Project>

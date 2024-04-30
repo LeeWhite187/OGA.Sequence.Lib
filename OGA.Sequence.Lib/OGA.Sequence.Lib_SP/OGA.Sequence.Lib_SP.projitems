@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>55462b4f-a927-4f95-9cad-df72c26649d3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>OGA.Sequence.Lib_SP</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Config\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Factory\SequenceFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factory\SequenceFactoryAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factory\SequenceFactory_abstract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factory\SequenceFactory_LocalAssembly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Config\ConfigBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Config\SequenceConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Config\StepConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Config\TransitionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Enumerations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultCancellationEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultDispositionEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultEndEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultEntryBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultErrorEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultOverallDispositionEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultStartEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultStateChangeEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultTransitionEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Sequence\TaskSequence.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Steps\TaskStep_abstract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Steps\TaskStep_DelayType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Steps\TaskStep_NoActionType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Steps\TaskStep_SequenceStart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Transitions\Transition_abstract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Transitions\Transition_AlwaysTrue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\TestSequenceService.cs" />
+  </ItemGroup>
+</Project>
