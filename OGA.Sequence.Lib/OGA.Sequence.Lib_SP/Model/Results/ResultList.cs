@@ -73,15 +73,9 @@ namespace OGA.Sequence.Model.Results
             re.Parameters.Add("oldstate", oldstate ?? "");
             re.Parameters.Add("newstate", newstate ?? "");
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
 
         /// <summary>
@@ -113,15 +107,9 @@ namespace OGA.Sequence.Model.Results
                     re.Parameters.Add(p.Key, p.Value);
             }
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
 
         /// <summary>
@@ -145,15 +133,9 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = phase;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
         /// <summary>
         /// Call this method when a sequence, phase, or step ends.
@@ -175,15 +157,9 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = phase;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
         public void Add_ErrorResult(eResultPhase phase, string msg, eObjectType objtype, Guid objid)
         {
@@ -200,15 +176,9 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = phase;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
         public void Add_ValidationError(string msg, eObjectType objtype, Guid objid)
         {
@@ -225,15 +195,9 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = eResultPhase.Validation;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
         public void Add_CancellationEntry(eResultPhase phase, string msg, eObjectType objtype, Guid objid, string sourcetype, string sourceid)
         {
@@ -253,15 +217,9 @@ namespace OGA.Sequence.Model.Results
             re.SourceType = sourcetype;
             re.SourceId = sourceid;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
         public void Add_DispositionEntry(eResultPhase phase, eObjectType objtype, Guid objid, eDisposition dispo)
         {
@@ -280,15 +238,9 @@ namespace OGA.Sequence.Model.Results
 
             re.Disposition = dispo;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
         public void Add_OverallDispositionEntry(eObjectType objtype, Guid objid, eDisposition dispo)
         {
@@ -307,15 +259,9 @@ namespace OGA.Sequence.Model.Results
 
             re.Disposition = dispo;
 
-            if(this._delOnResultEntryAdded != null)
-            {
-                try
-                {
-                    this._delOnResultEntryAdded(re);
-                } catch(Exception ex) { }
-            }
-
             this.Entries.Add(re);
+
+            this.Fire_OnResultEntryAdded(re);
         }
 
         #endregion
@@ -350,6 +296,34 @@ namespace OGA.Sequence.Model.Results
             }
 
             return sb.ToString();
+        }
+
+        #endregion
+
+
+        #region Delegate Calls
+
+        /// <summary>
+        /// Calls the external delegate on its own thread, to prevent stalling sequence progression.
+        /// </summary>
+        /// <param name="entry"></param>
+        private void Fire_OnResultEntryAdded(ResultEntryBase entry)
+        {
+            _ = Task.Run(() =>
+            {
+                // Wrap the delegate in a try-catch to ensure any exception it may throw won't hit the task scheduler and create an unhandled exception.
+                try
+                {
+                    if(this._delOnResultEntryAdded != null)
+                    {
+                        try
+                        {
+                            this._delOnResultEntryAdded(entry);
+                        } catch(Exception ex) { }
+                    }
+                }
+                catch (Exception ex) { }
+            });
         }
 
         #endregion
