@@ -62,6 +62,24 @@ namespace OGA.Sequence.Model.Sequence
         #endregion
 
 
+        #region Public Delegates
+
+        public delegate void delSequenceStateChange(TaskSequence seq);
+        private delSequenceStateChange _delOnSequenceStateChange;
+        /// <summary>
+        /// Assign a handler to this delegate to receive sequence state change events.
+        /// </summary>
+        public delSequenceStateChange OnSequenceStateChange
+        {
+            set
+            {
+                this._delOnSequenceStateChange = value;
+            }
+        }
+
+        #endregion
+
+
         #region ctor / dtor
 
         public TaskSequence()
@@ -561,6 +579,26 @@ namespace OGA.Sequence.Model.Sequence
 
             // Report it...
             this.Results?.Add_ObjStateChange(eObjectType.Step, this.Id, oldstate.ToString(), this.State.ToString());
+
+            Fire_OnSequenceStateChange();
+        }
+
+        #endregion
+
+
+        #region Delegate Calls
+
+        private void Fire_OnSequenceStateChange()
+        {
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    if (_delOnSequenceStateChange != null)
+                        this._delOnSequenceStateChange(this);
+                }
+                catch(Exception e) { }
+            });
         }
 
         #endregion

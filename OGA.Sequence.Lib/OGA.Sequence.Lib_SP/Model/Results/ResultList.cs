@@ -17,7 +17,7 @@ namespace OGA.Sequence.Model.Results
         #endregion
 
 
-        #region Delegates and Handlers
+        #region Public Delegates
 
         public delegate void delResultEntryAdded(ResultEntryBase entry);
 
