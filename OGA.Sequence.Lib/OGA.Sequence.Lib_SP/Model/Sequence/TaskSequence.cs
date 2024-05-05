@@ -57,14 +57,24 @@ namespace OGA.Sequence.Model.Sequence
         /// </summary>
         public eStepState State { get; private set; }
 
+        /// <summary>
+        /// Test sequence result data.
+        /// </summary>
         public ResultList Results { get; protected set; }
+
+        /// <summary>
+        /// Array list of step states that will trigger the state change delegate.
+        /// By default, is set to the operational states: Running, Completed, Aborted, Cancelled.
+        /// </summary>
+        public eStepState[] StepStates_toNotify { get; protected set; } =
+                new eStepState[] { eStepState.Running, eStepState.Aborted, eStepState.Cancelled, eStepState.Completed };
 
         #endregion
 
 
         #region Public Delegates
 
-        public delegate void delSequenceStateChange(TaskSequence seq);
+        public delegate void delSequenceStateChange(TaskSequence seq, eStepState oldstate, eStepState newstate);
         private delSequenceStateChange _delOnSequenceStateChange;
         /// <summary>
         /// Assign a handler to this delegate to receive sequence state change events.
@@ -74,6 +84,20 @@ namespace OGA.Sequence.Model.Sequence
             set
             {
                 this._delOnSequenceStateChange = value;
+            }
+        }
+
+        public delegate void delStepStateChange(TaskStep_abstract stp, eStepState oldstate, eStepState newstate);
+        private delStepStateChange _delOnStepStateChange;
+        /// <summary>
+        /// Assign a handler to this delegate to be notified when a sequence step changes state.
+        /// Property, StepStates_toNotify, defines what step states trigger this delegate.
+        /// </summary>
+        public delStepStateChange OnStepStateChange
+        {
+            set
+            {
+                this._delOnStepStateChange = value;
             }
         }
 
@@ -220,6 +244,10 @@ namespace OGA.Sequence.Model.Sequence
 
                     // Clear steps and such...
                     this._cfg = null;
+
+                    // Have each defined step unhook any callbacks we gave it...
+                    foreach (var s in this.Steps)
+                        s.OnStateChange = null;
 
                     this.Steps.Clear();
                     this.Transitions.Clear();
@@ -555,6 +583,10 @@ namespace OGA.Sequence.Model.Sequence
             {
                 // Signal the sequence end...
                 this.Results?.Add_EndEntry(eResultPhase.Running, eObjectType.Sequence, this.Id);
+
+                // Disconnect all step callbacks for easy cleanup...
+                foreach(var s in this.Steps)
+                    s.OnStateChange = null;
             }
         }
 
@@ -580,7 +612,7 @@ namespace OGA.Sequence.Model.Sequence
             // Report it...
             this.Results?.Add_ObjStateChange(eObjectType.Step, this.Id, oldstate.ToString(), this.State.ToString());
 
-            Fire_OnSequenceStateChange();
+            Fire_OnSequenceStateChange(oldstate, this.State);
         }
 
         #endregion
@@ -588,17 +620,55 @@ namespace OGA.Sequence.Model.Sequence
 
         #region Delegate Calls
 
-        private void Fire_OnSequenceStateChange()
+        /// <summary>
+        /// Calls state change delegate on a different thread, to prevent stalling execution.
+        /// </summary>
+        /// <param name="oldstate"></param>
+        /// <param name="newstate"></param>
+        private void Fire_OnSequenceStateChange(eStepState oldstate, eStepState newstate)
         {
             _ = Task.Run(() =>
             {
                 try
                 {
                     if (_delOnSequenceStateChange != null)
-                        this._delOnSequenceStateChange(this);
+                        this._delOnSequenceStateChange(this, oldstate, newstate);
                 }
                 catch(Exception e) { }
             });
+        }
+
+
+        /// <summary>
+        /// Called each time a sequence step changes state.
+        /// This callback is already called on an alternate thread, to prevent the step from stalling if we take too long to handle this call.
+        /// </summary>
+        /// <param name="stp"></param>
+        /// <param name="oldstate"></param>
+        /// <param name="newstate"></param>
+        private void CALLBACK_OnStepStateChange(TaskStep_abstract stp, eStepState oldstate, eStepState newstate)
+        {
+            // We will only call the delegate for states that are set to notify.
+            if(StepStates_toNotify == null || StepStates_toNotify.Length == 0)
+            {
+                // No step states are defined for notification.
+                return;
+            }
+
+            // See if we are to notify for the current step state...
+            if(!StepStates_toNotify.Contains(newstate))
+            {
+                // Notification is not enabled for this step state.
+                return;
+            }
+            // We are to notify for this step state.
+
+            // Call the external delegate...
+            // No need to do a Task.Run, as we are already running in an alternate thread.
+            // And, this callback is already wrapped in a try-catch by the step's delegate.
+            // So, we can simple call our delegate.
+            if (_delOnStepStateChange != null)
+                this._delOnStepStateChange(stp, oldstate, newstate);
         }
 
         #endregion
@@ -645,6 +715,8 @@ namespace OGA.Sequence.Model.Sequence
         private async Task<int> LoadStepsfromConfig()
         {
             int startstepcounter = 0;
+
+            TaskStep_abstract stp = null;
 
             try
             {
@@ -717,6 +789,9 @@ namespace OGA.Sequence.Model.Sequence
                     // If here, we have created a loaded step instance with validated config.
                     // We can add it to our listing.
 
+                    // Give the step a state change callback, so we can be notified when it changes state...
+                    si.OnStateChange = this.CALLBACK_OnStepStateChange;
+
                     // Add the minted step...
                     this.Steps.Add(si);
 
@@ -747,7 +822,12 @@ namespace OGA.Sequence.Model.Sequence
             }
             catch(Exception e)
             {
+                // Exception occurred while loading steps from config.
                 // We must report this.
+
+                // If we have a current step instance, we need to tell it to release any callbacks we gave it...
+                if(stp != null)
+                    stp.OnStateChange = null;
 
                 // Add an error to the results listing...
                 this.Results.Add_ErrorResult(eResultPhase.Loading, "Exception while loading step config.", eObjectType.StepConfig, Guid.Empty);

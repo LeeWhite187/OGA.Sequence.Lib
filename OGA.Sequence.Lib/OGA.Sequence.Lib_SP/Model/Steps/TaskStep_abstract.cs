@@ -60,6 +60,24 @@ namespace OGA.Sequence.Model.Steps
         #endregion
 
 
+        #region Public Delegates
+
+        public delegate void delStateChange(TaskStep_abstract stp, eStepState oldstate, eStepState newstate);
+        private delStateChange _delOnStateChange;
+        /// <summary>
+        /// Assign a handler to this delegate to receive step state change events.
+        /// </summary>
+        public delStateChange OnStateChange
+        {
+            set
+            {
+                this._delOnStateChange = value;
+            }
+        }
+
+        #endregion
+
+
         #region ctor / dtor
 
         public TaskStep_abstract()
@@ -382,6 +400,31 @@ namespace OGA.Sequence.Model.Steps
 
             // Report it...
             this._resultsref?.Add_ObjStateChange(eObjectType.Step, this.Id, oldstate.ToString(), this.State.ToString());
+
+            Fire_OnStateChange(oldstate, this.State);
+        }
+
+        #endregion
+
+
+        #region Delegate Calls
+
+        /// <summary>
+        /// Calls state change delegate on a different thread, to prevent stalling execution.
+        /// </summary>
+        /// <param name="oldstate"></param>
+        /// <param name="newstate"></param>
+        private void Fire_OnStateChange(eStepState oldstate, eStepState newstate)
+        {
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    if (this._delOnStateChange != null)
+                        this._delOnStateChange(this, oldstate, newstate);
+                }
+                catch(Exception e) { }
+            });
         }
 
         #endregion
