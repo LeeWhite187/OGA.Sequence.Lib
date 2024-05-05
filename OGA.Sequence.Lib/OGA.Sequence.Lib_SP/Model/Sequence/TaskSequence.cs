@@ -66,7 +66,7 @@ namespace OGA.Sequence.Model.Sequence
         /// Array list of step states that will trigger the state change delegate.
         /// By default, is set to the operational states: Running, Completed, Aborted, Cancelled.
         /// </summary>
-        public eStepState[] StepStates_toNotify { get; protected set; } =
+        public eStepState[] StepStates_toNotify { get; set; } =
                 new eStepState[] { eStepState.Running, eStepState.Aborted, eStepState.Cancelled, eStepState.Completed };
 
         #endregion
