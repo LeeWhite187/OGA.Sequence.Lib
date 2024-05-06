@@ -66,8 +66,14 @@ namespace OGA.Sequence.Model.Sequence
         /// Array list of step states that will trigger the state change delegate.
         /// By default, is set to the operational states: Running, Completed, Aborted, Cancelled.
         /// </summary>
-        public eStepState[] StepStates_toNotify { get; set; } =
+        public eStepState[] Cfg_StepStates_toNotify { get; set; } =
                 new eStepState[] { eStepState.Running, eStepState.Aborted, eStepState.Cancelled, eStepState.Completed };
+
+        /// <summary>
+        /// Tells the sequence to clear collected result entries when execution starts.
+        /// This removes all of the result entries from loading and validation checks, and slims down the result set.
+        /// </summary>
+        public bool Cfg_ClearResults_OnRunning { get; set; } = true;
 
         #endregion
 
@@ -331,6 +337,12 @@ namespace OGA.Sequence.Model.Sequence
                     return -1;
                 }
 
+                // Before we signal the running state, we need to determine if we are to clear out all result data from loading and validation checks...
+                if(this.Cfg_ClearResults_OnRunning)
+                {
+                    // We are to clear the result data from loading and validation checks.
+                    this.Results.ClearEntries();
+                }
 
                 // Signal the sequence start...
                 this.Results?.Add_StartEntry(eResultPhase.Running, eObjectType.Sequence, this.Id);
@@ -375,6 +387,9 @@ namespace OGA.Sequence.Model.Sequence
                         if(resstep == 0)
                         {
                             // Execution was cancelled during step.
+
+                            // Set a cancellation result...
+                            this.Results?.Add_CancellationEntry(eResultPhase.Running, "cancelled", eObjectType.Step, cstep.Id, "", "");
 
                             // Clear the current step...
                             this.CurrentStepId = null;
@@ -542,6 +557,9 @@ namespace OGA.Sequence.Model.Sequence
                     // Set sequence dispo...
                     this.Results?.Add_DispositionEntry(eResultPhase.Running, eObjectType.Sequence, this.Id, eDisposition.Completed);
 
+                    // Set an overall dispo...
+                    this.Results?.Add_OverallDispositionEntry(eObjectType.Sequence, this.Id, eDisposition.Completed);
+
                     return 1;
                 }
                 catch (OperationCanceledException oce)
@@ -556,6 +574,9 @@ namespace OGA.Sequence.Model.Sequence
 
                     // Set sequence dispo...
                     this.Results?.Add_DispositionEntry(eResultPhase.Running, eObjectType.Sequence, this.Id, eDisposition.Cancelled);
+
+                    // Set an overall dispo...
+                    this.Results?.Add_OverallDispositionEntry(eObjectType.Sequence, this.Id, eDisposition.Cancelled);
 
                     return 0;
                 }
@@ -576,6 +597,9 @@ namespace OGA.Sequence.Model.Sequence
 
                 // Set sequence dispo...
                 this.Results?.Add_DispositionEntry(eResultPhase.Running, eObjectType.Sequence, this.Id, eDisposition.Aborted);
+
+                // Set an overall dispo...
+                this.Results?.Add_OverallDispositionEntry(eObjectType.Sequence, this.Id, eDisposition.Cancelled);
 
                 return -2;
             }
@@ -649,14 +673,14 @@ namespace OGA.Sequence.Model.Sequence
         private void CALLBACK_OnStepStateChange(TaskStep_abstract stp, eStepState oldstate, eStepState newstate)
         {
             // We will only call the delegate for states that are set to notify.
-            if(StepStates_toNotify == null || StepStates_toNotify.Length == 0)
+            if(Cfg_StepStates_toNotify == null || Cfg_StepStates_toNotify.Length == 0)
             {
                 // No step states are defined for notification.
                 return;
             }
 
             // See if we are to notify for the current step state...
-            if(!StepStates_toNotify.Contains(newstate))
+            if(!Cfg_StepStates_toNotify.Contains(newstate))
             {
                 // Notification is not enabled for this step state.
                 return;

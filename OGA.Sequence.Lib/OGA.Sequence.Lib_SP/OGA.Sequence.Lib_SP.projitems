@@ -22,6 +22,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Config\TransitionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Enumerations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultCancellationEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultConsoleOutputEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultLogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultStepActionEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultDispositionEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultEndEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Results\ResultEntryBase.cs" />

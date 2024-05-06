@@ -40,6 +40,9 @@ namespace OGA.Sequence.Model
         StateChange,
         Transition,
         Start,
+        StepAction,
+        ConsoleOutput,
+        LogMessage,
         End,
         Error,
         Cancellation,
@@ -56,7 +59,8 @@ namespace OGA.Sequence.Model
         Step,
         Transition,
         Result,
-        Phase
+        Phase,
+        Console
     }
 
     public enum eDisposition

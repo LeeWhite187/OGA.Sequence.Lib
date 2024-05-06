@@ -9,11 +9,24 @@ namespace OGA.Sequence.Model.Results
 {
     public class ResultEntryBase : ConfigBase
     {
+        /// <summary>
+        /// Time of entry.
+        /// Set during creation.
+        /// </summary>
         public DateTime EntryTimeUTC { get; set; }
 
+        /// <summary>
+        /// Indicates the result type.
+        /// </summary>
         public virtual eEntryType EntryType { get => eEntryType.Base; }
 
+        /// <summary>
+        /// Relevant resource id that generated the result entry.
+        /// </summary>
         public Guid ObjId { get; set; }
+        /// <summary>
+        /// Type of resource, creating the entry.
+        /// </summary>
         public eObjectType ObjType { get; set; }
 
         /// <summary>

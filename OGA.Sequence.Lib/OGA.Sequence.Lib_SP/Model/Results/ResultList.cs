@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,11 +11,46 @@ namespace OGA.Sequence.Model.Results
 {
     public class ResultList
     {
+        private int _entrycounter;
+
         #region Public Properties
 
         public eDisposition Disposition { get; set; }
 
         public List<ResultEntryBase> Entries { get; set; }
+
+        /// <summary>
+        /// Array list of result types that will trigger the result output delegate.
+        /// By default, is set to the operational states: Cancellation, StepAction, ConsoleOutput, Log, Disposition, OverallDisposition, Error.
+        /// </summary>
+        public eEntryType[] Cfg_ResultTypes_toNotify { get; set; } =
+                new eEntryType[]
+                {
+                    //eEntryType.StateChange,
+                    eEntryType.Transition,
+                    eEntryType.Start,
+                    eEntryType.StepAction,
+                    eEntryType.ConsoleOutput,
+                    eEntryType.LogMessage,
+                    eEntryType.End,
+                    eEntryType.Error,
+                    eEntryType.Cancellation,
+                    eEntryType.Disposition,
+                    eEntryType.OverallDisposition
+                };
+
+        /// <summary>
+        /// Array list of sequence phases where results will notify.
+        /// By default, set to the Running phase.
+        /// </summary>
+        public eResultPhase[] Cfg_ResultPhase_toNotify { get; set; } =
+                new eResultPhase[]
+                {
+                    //eResultPhase.Loading,
+                    //eResultPhase.Validation,
+                    eResultPhase.Running,
+                    //eResultPhase.Reporting
+                };
 
         #endregion
 
@@ -49,6 +87,92 @@ namespace OGA.Sequence.Model.Results
         #region Add Methods
 
         /// <summary>
+        /// Call this to aggregate log messages with result data.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="severity"></param>
+        /// <param name="classname"></param>
+        /// <param name="lineno"></param>
+        public void Add_LogEntry(string msg, string severity = "Info", string classname = "", int? lineno = 0)
+        {
+            // Create a new result entry for the log message...
+            var re = new ResultLogEntry();
+            re.Id = Guid.NewGuid();
+            re.Name = "Error";
+            re.Description = msg;
+            re.Parameters = new Dictionary<string, string>();
+
+            re.EntryTimeUTC = DateTime.UtcNow;
+            re.ObjType = eObjectType.Console;
+            re.ObjId = Guid.Empty;
+            re.Phase = eResultPhase.Running;
+
+            re.Severity = severity ?? "";
+            re.Class = classname ?? "";
+            re.LineNo = lineno ?? 0;
+            re.Message = msg ?? "";
+
+            this.priv_AddEntry(re);
+
+            this.Fire_OnResultEntryAdded(re);
+        }
+
+        /// <summary>
+        /// Call this for console output, that occurs outside a step action.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="iserror"></param>
+        public void Add_ConsoleOutputEntry(string msg, bool iserror = false)
+        {
+            // Create a new result entry for the console entry...
+            var re = new ResultConsoleOutputEntry();
+            re.Id = Guid.NewGuid();
+            re.Name = "Error";
+            re.Description = msg;
+            re.Parameters = new Dictionary<string, string>();
+
+            re.EntryTimeUTC = DateTime.UtcNow;
+            re.ObjType = eObjectType.Console;
+            re.ObjId = Guid.Empty;
+            re.Phase = eResultPhase.Running;
+
+            re.Message = msg ?? "";
+            re.IsError = iserror;
+
+            this.priv_AddEntry(re);
+
+            this.Fire_OnResultEntryAdded(re);
+        }
+
+        /// <summary>
+        /// Call this for step logic that outputs to the console.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="stepid"></param>
+        /// <param name="iserror"></param>
+        public void Add_StepConsoleOutputEntry(string msg, Guid stepid, bool iserror = false)
+        {
+            // Create a new result entry for the console entry...
+            var re = new ResultConsoleOutputEntry();
+            re.Id = Guid.NewGuid();
+            re.Name = "Error";
+            re.Description = msg;
+            re.Parameters = new Dictionary<string, string>();
+
+            re.EntryTimeUTC = DateTime.UtcNow;
+            re.ObjType = eObjectType.Step;
+            re.ObjId = stepid;
+            re.Phase = eResultPhase.Running;
+
+            re.Message = msg ?? "";
+            re.IsError = iserror;
+
+            this.priv_AddEntry(re);
+
+            this.Fire_OnResultEntryAdded(re);
+        }
+
+        /// <summary>
         /// Call this method when a sequence object changes state.
         /// </summary>
         /// <param name="objtype"></param>
@@ -62,7 +186,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "StateChange";
             re.Description = "";
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -73,7 +196,7 @@ namespace OGA.Sequence.Model.Results
             re.Parameters.Add("oldstate", oldstate ?? "");
             re.Parameters.Add("newstate", newstate ?? "");
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -92,7 +215,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Transition";
             re.Description = "";
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -107,7 +229,7 @@ namespace OGA.Sequence.Model.Results
                     re.Parameters.Add(p.Key, p.Value);
             }
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -125,7 +247,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Started";
             re.Description = "";
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -133,7 +254,7 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = phase;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -149,7 +270,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Ended";
             re.Description = "";
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -157,7 +277,7 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = phase;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -168,7 +288,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Error";
             re.Description = msg;
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -176,7 +295,7 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = phase;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -187,7 +306,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Error";
             re.Description = msg;
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -195,7 +313,7 @@ namespace OGA.Sequence.Model.Results
             re.ObjId = objid;
             re.Phase = eResultPhase.Validation;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -206,7 +324,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Cancellation";
             re.Description = msg;
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -217,7 +334,7 @@ namespace OGA.Sequence.Model.Results
             re.SourceType = sourcetype;
             re.SourceId = sourceid;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -228,7 +345,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Disposition";
             re.Description = "";
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -238,7 +354,7 @@ namespace OGA.Sequence.Model.Results
 
             re.Disposition = dispo;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -249,7 +365,6 @@ namespace OGA.Sequence.Model.Results
             re.Id = Guid.NewGuid();
             re.Name = "Overall_Disposition";
             re.Description = "";
-            re.DisplayOrder = this.GetNextDisplayOrder();
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
@@ -259,7 +374,7 @@ namespace OGA.Sequence.Model.Results
 
             re.Disposition = dispo;
 
-            this.Entries.Add(re);
+            this.priv_AddEntry(re);
 
             this.Fire_OnResultEntryAdded(re);
         }
@@ -270,19 +385,15 @@ namespace OGA.Sequence.Model.Results
         #region Public Methods
 
         /// <summary>
-        /// Determines the next display order value to use.
+        /// Called by the sequence logic when it needs to clear result data.
+        /// This may be called when the sequence enters the running phase, to clear out any loading and validation entries that are only needed for diagnostic purposes.
         /// </summary>
-        /// <returns></returns>
-        private int GetNextDisplayOrder()
+        public void ClearEntries()
         {
-            try
+            lock(this.Entries)
             {
-                int res = this.Entries.Max(x => x.DisplayOrder);
-                return res + 1;
-            }
-            catch (Exception ex)
-            {
-                return 1;
+                this._entrycounter = 0;
+                this.Entries.Clear();
             }
         }
 
@@ -309,6 +420,18 @@ namespace OGA.Sequence.Model.Results
         /// <param name="entry"></param>
         private void Fire_OnResultEntryAdded(ResultEntryBase entry)
         {
+            if (entry == null)
+                return;
+
+            if (this.Cfg_ResultPhase_toNotify == null || this.Cfg_ResultPhase_toNotify.Length == 0)
+                return;
+
+            // We will only notify for result entries for the desired phase and entry types...
+            if (!this.Cfg_ResultPhase_toNotify.Contains(entry.Phase))
+                return;
+            if (!this.Cfg_ResultTypes_toNotify.Contains(entry.EntryType))
+                return;
+
             _ = Task.Run(() =>
             {
                 // Wrap the delegate in a try-catch to ensure any exception it may throw won't hit the task scheduler and create an unhandled exception.
@@ -324,6 +447,24 @@ namespace OGA.Sequence.Model.Results
                 }
                 catch (Exception ex) { }
             });
+        }
+
+        #endregion
+
+
+        #region Private Methods
+
+        /// <summary>
+        /// Wraps the actual result entry addition, to ensure each entry gets a unique order id, and protects the listing from cross-thread updates.
+        /// </summary>
+        /// <param name="re"></param>
+        private void priv_AddEntry(ResultEntryBase re)
+        {
+            lock(this.Entries)
+            {
+                this._entrycounter++;
+                this.Entries.Add(re);
+            }
         }
 
         #endregion
