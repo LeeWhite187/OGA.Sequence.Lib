@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OGA.Sequence.Model.Steps;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,6 +86,37 @@ namespace OGA.Sequence.Model.Results
 
 
         #region Add Methods
+
+        /// <summary>
+        /// Call this to aggregate user actions.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="actiontype"></param>
+        /// <param name="response"></param>
+        /// <param name="category"></param>
+        public void Add_LogEntry(string username, string actiontype, string response, string category = "")
+        {
+            // Create a new result entry for the user action message...
+            var re = new ResultUserActionEntry();
+            re.Id = Guid.NewGuid();
+            re.Name = "Error";
+            re.Description = "";
+            re.Parameters = new Dictionary<string, string>();
+
+            re.EntryTimeUTC = DateTime.UtcNow;
+            re.ObjType = eObjectType.Console;
+            re.ObjId = Guid.Empty;
+            re.Phase = eResultPhase.Running;
+
+            re.UserName = username ?? "";
+            re.ActionType = actiontype ?? "";
+            re.Response = response ?? "";
+            re.Category = category ?? "";
+
+            this.priv_AddEntry(re);
+
+            this.Fire_OnResultEntryAdded(re);
+        }
 
         /// <summary>
         /// Call this to aggregate log messages with result data.

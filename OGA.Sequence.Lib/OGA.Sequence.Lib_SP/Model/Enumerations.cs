@@ -41,6 +41,7 @@ namespace OGA.Sequence.Model
         Transition,
         Start,
         StepAction,
+        UserAction,
         ConsoleOutput,
         LogMessage,
         End,
