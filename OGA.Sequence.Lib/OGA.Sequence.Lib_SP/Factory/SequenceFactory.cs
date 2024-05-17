@@ -123,7 +123,7 @@ namespace OGA.Sequence.Factory
                     // Cache is bad.
 
                     // Remove the cache entry...
-                    steptypecachelist.Remove(searchterm);
+                    transitiontypecachelist.Remove(searchterm);
                 }
                 else
                 {
@@ -149,7 +149,7 @@ namespace OGA.Sequence.Factory
                 // We will cache it, and return.
 
                 // Cache an entry of what factory can make our transition...
-                steptypecachelist.Add(searchterm, sf.Key);
+                transitiontypecachelist.Add(searchterm, sf.Key);
 
                 // Return the instance...
                 return (1, obj);
