@@ -12,7 +12,7 @@ namespace OGA.Sequence.Model.Results
 {
     public class ResultList
     {
-        private int _entrycounter;
+        private int _lastentryid;
 
         #region Public Properties
 
@@ -424,7 +424,6 @@ namespace OGA.Sequence.Model.Results
         {
             lock(this.Entries)
             {
-                this._entrycounter = 0;
                 this.Entries.Clear();
             }
         }
@@ -494,7 +493,8 @@ namespace OGA.Sequence.Model.Results
         {
             lock(this.Entries)
             {
-                this._entrycounter++;
+                this._lastentryid++;
+                re.DisplayOrder = this._lastentryid;
                 this.Entries.Add(re);
             }
         }
