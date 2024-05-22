@@ -99,7 +99,7 @@ namespace OGA.Sequence.Model.Results
             // Create a new result entry for the user action message...
             var re = new ResultUserActionEntry();
             re.Id = Guid.NewGuid();
-            re.Name = "Error";
+            re.Name = "LogEntry";
             re.Description = "";
             re.Parameters = new Dictionary<string, string>();
 
@@ -130,7 +130,7 @@ namespace OGA.Sequence.Model.Results
             // Create a new result entry for the log message...
             var re = new ResultLogEntry();
             re.Id = Guid.NewGuid();
-            re.Name = "Error";
+            re.Name = "LogEntry";
             re.Description = msg;
             re.Parameters = new Dictionary<string, string>();
 
@@ -159,7 +159,7 @@ namespace OGA.Sequence.Model.Results
             // Create a new result entry for the console entry...
             var re = new ResultConsoleOutputEntry();
             re.Id = Guid.NewGuid();
-            re.Name = "Error";
+            re.Name = "Console";
             re.Description = msg;
             re.Parameters = new Dictionary<string, string>();
 
@@ -187,7 +187,7 @@ namespace OGA.Sequence.Model.Results
             // Create a new result entry for the console entry...
             var re = new ResultConsoleOutputEntry();
             re.Id = Guid.NewGuid();
-            re.Name = "Error";
+            re.Name = "StepConsole";
             re.Description = msg;
             re.Parameters = new Dictionary<string, string>();
 
@@ -336,7 +336,7 @@ namespace OGA.Sequence.Model.Results
             // Create a new result entry for the error...
             var re = new ResultErrorEntry();
             re.Id = Guid.NewGuid();
-            re.Name = "Error";
+            re.Name = "ValidationError";
             re.Description = msg;
             re.Parameters = new Dictionary<string, string>();
 
