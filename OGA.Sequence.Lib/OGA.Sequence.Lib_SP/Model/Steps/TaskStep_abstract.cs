@@ -11,8 +11,16 @@ namespace OGA.Sequence.Model.Steps
     {
         #region Private Fields
 
+        /// <summary>
+        /// Provides configuration to drive step behavior.
+        /// Given to the step when loaded.
+        /// </summary>
         protected StepConfig _cfg;
 
+        /// <summary>
+        /// Shared resultlist from the task sequence parent.
+        /// Given to the step when loaded.
+        /// </summary>
         protected ResultList _resultsref;
 
         #endregion
