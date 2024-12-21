@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 namespace OGA.Sequence.Model.Steps
 {
     /// <summary>
-    /// Serializable config for a sequence object.
+    /// Serializable base config type for sequences, steps, transitions, etc.
+    /// Can be derived for more named properties and complex types.
     /// </summary>
     public class ConfigBase
     {

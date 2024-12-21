@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace OGA.Sequence.Model.Results
 {
@@ -88,18 +89,47 @@ namespace OGA.Sequence.Model.Results
         #region Add Methods
 
         /// <summary>
+        /// Call this to add step actions.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="datatype"></param>
+        /// <param name="data"></param>
+        public void Add_StepActionEntry(string name, string datatype, string data)
+        {
+            // Create a new result entry for the step action message...
+            var re = new ResultStepActionEntry();
+            re.Id = Guid.NewGuid();
+            re.Name = "StepAction";
+            re.Description = "";
+            re.Parameters = new Dictionary<string, string>();
+
+            re.EntryTimeUTC = DateTime.UtcNow;
+            re.ObjType = eObjectType.Console;
+            re.ObjId = Guid.Empty;
+            re.Phase = eResultPhase.Running;
+
+            re.Name = name ?? "";
+            re.DataType = datatype ?? "";
+            re.Data = data ?? "";
+
+            this.priv_AddEntry(re);
+
+            this.Fire_OnResultEntryAdded(re);
+        }
+
+        /// <summary>
         /// Call this to aggregate user actions.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="actiontype"></param>
         /// <param name="response"></param>
         /// <param name="category"></param>
-        public void Add_LogEntry(string username, string actiontype, string response, string category = "")
+        public void Add_UserActionEntry(string username, string actiontype, string response, string category = "")
         {
             // Create a new result entry for the user action message...
             var re = new ResultUserActionEntry();
             re.Id = Guid.NewGuid();
-            re.Name = "LogEntry";
+            re.Name = "UserAction";
             re.Description = "";
             re.Parameters = new Dictionary<string, string>();
 

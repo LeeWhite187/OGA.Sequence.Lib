@@ -134,6 +134,10 @@ namespace OGA.Sequence.Model.Sequence
         {
             bool valpassed = true;
 
+            // Add logic to check 
+
+
+
             // Return success if each check above passed...
             if (valpassed)
                 return 1;

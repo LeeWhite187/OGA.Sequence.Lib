@@ -113,6 +113,9 @@ namespace OGA.Sequence.Model.Steps
         /// </summary>
         /// <returns></returns>
         abstract protected Task<int> ValidateConfig();
+        //{
+        //    // Include any mandatory validation checks for all step types, here...
+        //}
 
         #endregion
 
@@ -151,8 +154,8 @@ namespace OGA.Sequence.Model.Steps
                     }
                     if(cfg.Id == Guid.Empty)
                     {
-                        // Transition Id is empty.
-                        this._resultsref.Add_ErrorResult(eResultPhase.Loading, "Step config contains blank sequence Id.", eObjectType.StepConfig, id);
+                        // Step Id is empty.
+                        this._resultsref.Add_ErrorResult(eResultPhase.Loading, "Step config contains blank Id.", eObjectType.StepConfig, id);
                         return -2;
                     }
                 }
@@ -174,7 +177,7 @@ namespace OGA.Sequence.Model.Steps
                 var res = await DoValidateConfig();
                 if (res != 1)
                 {
-                    // Failed config.
+                    // Failed validation.
 
                     // Add an error to the results...
                     this._resultsref.Add_ErrorResult(eResultPhase.Loading, "Step failed to validate config.", eObjectType.StepConfig, this.Id);
@@ -227,6 +230,8 @@ namespace OGA.Sequence.Model.Steps
         {
             bool valpassed = true;
 
+            _resultsref?.Add_StartEntry(eResultPhase.Validation, eObjectType.StepConfig, this.Id);
+
             // Call the private validate method...
             // Wrap it in a try-catch to ensure the derived method doesn't throw and unwind us.
             try
@@ -261,9 +266,15 @@ namespace OGA.Sequence.Model.Steps
 
             // Return success if each check above passed...
             if (valpassed)
+            {
+                _resultsref?.Add_EndEntry(eResultPhase.Validation, eObjectType.StepConfig, this.Id);
                 return 1;
+            }
             else
+            {
+                _resultsref?.Add_EndEntry(eResultPhase.Validation, eObjectType.StepConfig, this.Id);
                 return -1;
+            }
         }
 
         /// <summary>
@@ -377,8 +388,6 @@ namespace OGA.Sequence.Model.Steps
                 _resultsref?.Add_ErrorResult(eResultPhase.Loading, "Step missing config.", eObjectType.StepConfig, this.Id);
                 valpassed = false;
             }
-
-            // Include any mandatory validation checks for all step types, here...
 
             // Return success if each check above passed...
             if (valpassed)
