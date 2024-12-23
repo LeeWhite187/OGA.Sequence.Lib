@@ -244,23 +244,31 @@ namespace OGA.Sequence.Factory
             //var localfac = new SequenceFactory_LocalAssembly();
             //faclist.Add(Guid.NewGuid().ToString(), localfac);
 
-            // Get a list of factories to pull from...
-            // This is done by looking for class types that derive from our factory base.
-            var factories = AppDomain.CurrentDomain.GetAssemblies()
-                        // alternative: .GetExportedTypes()
-                        .SelectMany(domainAssembly => domainAssembly.GetTypes())
-                        .Where(type => type.IsSubclassOf(typeof(SequenceFactory_abstract))
-                                        && type != typeof(SequenceFactory_abstract)
-                                        && ! type.IsAbstract).ToArray();
-
-            // Add an instance of each factory to our list...
-            foreach(var f in factories)
+            try
             {
-                var fac = (SequenceFactory_abstract)Activator.CreateInstance(f);
-                faclist.Add(Guid.NewGuid().ToString(), fac);
-            }
+                // Get a list of factories to pull from...
+                // This is done by looking for class types that derive from our factory base.
+                var factories = AppDomain.CurrentDomain.GetAssemblies()
+                            // alternative: .GetExportedTypes()
+                            .SelectMany(domainAssembly => domainAssembly.GetTypes())
+                            .Where(type => type.IsSubclassOf(typeof(SequenceFactory_abstract))
+                                            && type != typeof(SequenceFactory_abstract)
+                                            && ! type.IsAbstract).ToArray();
 
-            return 1;
+                // Add an instance of each factory to our list...
+                foreach(var f in factories)
+                {
+                    var fac = (SequenceFactory_abstract)Activator.CreateInstance(f);
+                    faclist.Add(Guid.NewGuid().ToString(), fac);
+                }
+
+                return 1;
+            }
+            catch(Exception ex)
+            {
+                // Failed to initialize.
+                return -2;
+            }
         }
     }
 }
