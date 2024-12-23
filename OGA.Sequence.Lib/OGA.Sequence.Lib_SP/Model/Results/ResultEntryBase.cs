@@ -1,4 +1,5 @@
-﻿using OGA.Sequence.Model.Steps;
+﻿using OGA.Sequence.Model.Config;
+using OGA.Sequence.Model.Steps;
 using System;
 using System.Collections.Generic;
 using System.Linq;

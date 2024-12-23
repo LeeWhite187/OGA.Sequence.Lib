@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OGA.Sequence.Model.Steps
+namespace OGA.Sequence.Model.Config
 {
     /// <summary>
     /// Serializable config for a sequence.

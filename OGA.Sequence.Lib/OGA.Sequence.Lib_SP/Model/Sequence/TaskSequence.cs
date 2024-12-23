@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OGA.Sequence.Factory;
+using OGA.Sequence.Model.Config;
 using OGA.Sequence.Model.Results;
 using OGA.Sequence.Model.Steps;
 using OGA.Sequence.Model.Transitions;

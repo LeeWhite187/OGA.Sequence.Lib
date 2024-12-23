@@ -1,4 +1,5 @@
-﻿using OGA.Sequence.Model.Results;
+﻿using OGA.Sequence.Model.Config;
+using OGA.Sequence.Model.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;

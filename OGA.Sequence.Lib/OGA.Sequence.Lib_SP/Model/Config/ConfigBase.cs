@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OGA.Sequence.Model.Steps
+namespace OGA.Sequence.Model.Config
 {
     /// <summary>
     /// Serializable base config type for sequences, steps, transitions, etc.

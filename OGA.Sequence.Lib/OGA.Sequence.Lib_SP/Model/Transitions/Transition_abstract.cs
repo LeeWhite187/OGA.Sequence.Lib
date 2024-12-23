@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using OGA.Sequence.Model.Steps;
 using OGA.Sequence.Model;
 using OGA.Sequence.Model.Results;
+using OGA.Sequence.Model.Config;
 
 namespace OGA.Sequence.Model.Transitions
 {
