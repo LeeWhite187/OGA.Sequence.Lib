@@ -94,7 +94,7 @@ namespace OGA.Sequence.Model.Results
         /// <param name="name"></param>
         /// <param name="datatype"></param>
         /// <param name="data"></param>
-        public void Add_StepActionEntry(string name, string datatype, string data)
+        public void Add_StepActionEntry(string name, string datatype, Guid objid, string data)
         {
             // Create a new result entry for the step action message...
             var re = new ResultStepActionEntry();
@@ -104,8 +104,8 @@ namespace OGA.Sequence.Model.Results
             re.Parameters = new Dictionary<string, string>();
 
             re.EntryTimeUTC = DateTime.UtcNow;
-            re.ObjType = eObjectType.Console;
-            re.ObjId = Guid.Empty;
+            re.ObjType = eObjectType.Step;
+            re.ObjId = objid;
             re.Phase = eResultPhase.Running;
 
             re.Name = name ?? "";
