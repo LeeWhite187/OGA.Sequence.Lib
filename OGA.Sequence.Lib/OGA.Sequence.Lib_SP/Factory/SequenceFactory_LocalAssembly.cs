@@ -14,6 +14,11 @@ namespace OGA.Sequence.Factory
     [SequenceFactory]
     public class SequenceFactory_LocalAssembly : SequenceFactory_abstract
     {
+        public SequenceFactory_LocalAssembly ()
+        {
+            this._classname = nameof(SequenceFactory_LocalAssembly);
+        }
+
         /// <summary>
         /// Override this method with an implementation for creating step instances in your local assembly.
         /// Returns 1 if found, other not found.

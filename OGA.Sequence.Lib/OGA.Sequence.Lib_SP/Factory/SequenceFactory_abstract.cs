@@ -13,6 +13,8 @@ namespace OGA.Sequence.Factory
     /// </summary>
     abstract public class SequenceFactory_abstract
     {
+        protected string _classname;
+
         /// <summary>
         /// Override this method with an implementation for creating step instances in your local assembly.
         /// Returns 1 if found, other not found.

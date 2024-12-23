@@ -239,13 +239,26 @@ namespace OGA.Sequence.Factory
             steptypecachelist = new Dictionary<string, string>();
             transitiontypecachelist = new Dictionary<string, string>();
 
-            // Add our local factory...
-            // We will include a random key, so we can speed up later searches.
-            var localfac = new SequenceFactory_LocalAssembly();
-            faclist.Add(Guid.NewGuid().ToString(), localfac);
+            //// Add our local factory...
+            //// We will include a random key, so we can speed up later searches.
+            //var localfac = new SequenceFactory_LocalAssembly();
+            //faclist.Add(Guid.NewGuid().ToString(), localfac);
 
+            // Get a list of factories to pull from...
+            // This is done by looking for class types that derive from our factory base.
+            var factories = AppDomain.CurrentDomain.GetAssemblies()
+                        // alternative: .GetExportedTypes()
+                        .SelectMany(domainAssembly => domainAssembly.GetTypes())
+                        .Where(type => type.IsSubclassOf(typeof(SequenceFactory_abstract))
+                                        && type != typeof(SequenceFactory_abstract)
+                                        && ! type.IsAbstract).ToArray();
 
-            // Add logic to iterate referenced assemblies for class types that are decorated with a factory attribute and contain the right calls...
+            // Add an instance of each factory to our list...
+            foreach(var f in factories)
+            {
+                var fac = (SequenceFactory_abstract)Activator.CreateInstance(f);
+                faclist.Add(Guid.NewGuid().ToString(), fac);
+            }
 
             return 1;
         }
