@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OGA.Sequence.Factory;
+using OGA.Sequence.Model.Config;
 using OGA.Sequence.Model.Sequence;
 using OGA.Sequence.Model.Steps;
 using OGA.Sequence.Model.Transitions;
